@@ -382,7 +382,7 @@ def predict_with_model(model_path: Path, source: Path, class_conf_thresh_overrid
     # --------------------------
     # Setup
     # --------------------------
-    BASE_PRED_DIR = Path(r"C:\Users\Dhaksha Aniesh\Desktop\Misc\YOLO Predictions")
+    BASE_PRED_DIR = Path(r"Path to Output file location")
 
     # Load model
     model = YOLO(str(model_path))
