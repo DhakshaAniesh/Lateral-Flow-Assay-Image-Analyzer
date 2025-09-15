@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 lfa_toolkit.py
 
@@ -349,12 +348,12 @@ def evaluate_predictions(results_map: Dict[str,str], ground_truth_csv: Path, sav
             y_pred.append(pred)
 
     if not y_true:
-        print("⚠️ No matching ground truth found for evaluation.")
+        print("No matching ground truth found for evaluation.")
         return
 
     # Accuracy
     acc = accuracy_score(y_true, y_pred)
-    print(f"\n📊 Accuracy: {acc*100:.2f}%")
+    print(f"Accuracy: {acc*100:.2f}%")
 
     # Detailed report
     print("\nClassification Report:")
@@ -371,7 +370,7 @@ def evaluate_predictions(results_map: Dict[str,str], ground_truth_csv: Path, sav
     # Save metrics
     cm_df.to_csv(save_base / "confusion_matrix.csv")
     pd.DataFrame({"y_true": y_true, "y_pred": y_pred}).to_csv(save_base / "detailed_predictions.csv", index=False)
-    print(f"\n✅ Metrics saved: {save_base / 'confusion_matrix.csv'} & {save_base / 'detailed_predictions.csv'}")
+    print(f"Metrics saved: {save_base / 'confusion_matrix.csv'} & {save_base / 'detailed_predictions.csv'}")
 
 # ----------------------------
 # Predict wrapper
@@ -388,7 +387,7 @@ def predict_with_model(model_path: Path, source: Path, class_conf_thresh_overrid
     model = YOLO(str(model_path))
     names_map = {i: n for i, n in model.names.items()}
 
-    # 🔹 Extract model type (v8n, v8s, v8m) from path string
+    # Extract model type (v8n, v8s, v8m) from path string
     match = re.search(r"yolov8([nsm])", str(model_path).lower())
     if match:
         model_name = f"v8{match.group(1)}"
@@ -507,10 +506,10 @@ def predict_with_model(model_path: Path, source: Path, class_conf_thresh_overrid
         for k, v in counts.items():
             writer.writerow([k, v])
 
-    print(f"\n✅ Results saved to {save_base}")
-    print(f"   - Annotated images inside this folder")
-    print(f"   - Detailed CSV: {detailed_csv_path}")
-    print(f"   - Confusion CSV: {confusion_matrix_path}")
+    print(f" Results saved to {save_base}")
+    print(f"- Annotated images inside this folder")
+    print(f"- Detailed CSV: {detailed_csv_path}")
+    print(f"- Confusion CSV: {confusion_matrix_path}")
 
     return results_map, save_base
 
@@ -567,7 +566,7 @@ def main():
 
         results, save_base = predict_with_model(model_p, src, device=device)
 
-        # 👇 Add this to see per-image results in CMD
+        # Add this to see per-image results in CMD
         print("\nSummary:")
         for k, v in results.items():
             print(f"  {k} -> {v}")
