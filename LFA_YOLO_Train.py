@@ -9,14 +9,12 @@ import gc
 # --------------------------
 # CONFIG
 # --------------------------
-DATA_YAML = "C:/Users/Dhaksha Aniesh/Desktop/YOLO/Dataset Final/data.yaml"
+DATA_YAML = "Path to data.yaml file"
 EPOCHS = 100
 IMG_SIZE = 1024
-OUTPUT_DIR = "C:/Users/Dhaksha Aniesh/Desktop/YOLO/Output/detect3"
-
-HYP_YAML = "C:/Users/Dhaksha Aniesh/Desktop/YOLO/Dataset Final/hyp.yaml"
+OUTPUT_DIR = "Path for output directory"
+HYP_YAML = "Path to hyp.yaml file"
 USE_HYP = os.path.exists(HYP_YAML)
-
 
 # --------------------------
 # MEMORY + CACHE CLEANUP
@@ -32,16 +30,16 @@ def cleanup_memory():
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
         torch.cuda.ipc_collect()
-        print("  ✅ CUDA cache cleared")
+        print("CUDA cache cleared")
 
     # Clear Ultralytics cache
     ucache = Path.home() / "AppData" / "Local" / "Ultralytics"
     if ucache.exists():
         try:
             shutil.rmtree(ucache)
-            print(f"  ✅ Deleted YOLO cache at {ucache}")
+            print(f"Deleted YOLO cache at {ucache}")
         except Exception as e:
-            print(f"  ⚠️ Could not delete YOLO cache: {e}")
+            print(f"Could not delete YOLO cache: {e}")
 
     # Clear __pycache__ folders
     for root, dirs, _ in os.walk(Path.cwd()):
@@ -49,13 +47,13 @@ def cleanup_memory():
             if d == "__pycache__":
                 try:
                     shutil.rmtree(Path(root) / d)
-                    print(f"  ✅ Removed {Path(root) / d}")
+                    print(f"Removed {Path(root) / d}")
                 except Exception:
                     pass
 
     # Clear Windows standby memory using RAMMap if available
     rammap_paths = [
-        Path("C:/Windows/System32/RAMMap.exe"),
+        Path("Path to RAMMap"),
         Path.cwd() / "RAMMap.exe"
     ]
     rammap = next((p for p in rammap_paths if p.exists()), None)
@@ -63,12 +61,11 @@ def cleanup_memory():
     if rammap:
         try:
             subprocess.run([str(rammap), "-E"], check=True)
-            print("  ✅ Flushed Windows standby memory via RAMMap")
+            print("Flushed Windows standby memory via RAMMap")
         except Exception as e:
-            print(f"  ⚠️ Failed to flush standby memory: {e}")
+            print(f"Failed to flush standby memory: {e}")
     else:
-        print("  ⚠️ RAMMap.exe not found (standby list not cleared)")
-
+        print("RAMMap.exe not found (standby list not cleared)")
 
 # --------------------------
 # TRAINING FUNCTION
@@ -78,7 +75,7 @@ def train_models():
     trained_models = []
 
     for variant in variants:
-        print(f"\n🚀 Training {variant} ...")
+        print(f"Training {variant} ...")
 
         cleanup_memory()  # free RAM + VRAM before training
 
@@ -91,10 +88,10 @@ def train_models():
             project=OUTPUT_DIR,
             name=f"exp_{variant.replace('.pt','')}",
             exist_ok=True,
-            batch=2,           # ✅ safe for 4GB VRAM
-            workers=2,         # ✅ reduces CPU RAM usage
+            batch=2,           # safe for 4GB VRAM
+            workers=2,         # reduces CPU RAM usage
             device=0,          # Force GPU
-            verbose=False,     # ✅ prevents log spam
+            verbose=False,     # prevents log spam
             mosaic=0.5,
             close_mosaic=15,
             mixup=0.0,
@@ -130,4 +127,4 @@ if __name__ == "__main__":
 
     if args.mode == "train":
         trained = train_models()
-        print("\n✅ Training complete. Trained models:", trained)
+        print("Training complete. Trained models:", trained)
