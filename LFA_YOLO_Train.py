@@ -21,7 +21,7 @@ USE_HYP = os.path.exists(HYP_YAML)
 # --------------------------
 def cleanup_memory():
     """Free GPU VRAM, clear Python garbage, Ultralytics cache, and Windows standby list if possible."""
-    print("\n🧹 Cleaning memory and caches...")
+    print("Cleaning memory and caches...")
 
     # Clear Python garbage
     gc.collect()
